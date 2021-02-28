@@ -1,0 +1,21 @@
+body {
+  background-color: darkblue;
+  color: lightblue;
+  font-size: 25px;
+  display: flex;
+}
+
+h1 {
+  color: aqua;
+  font-size: 85px;
+  @media (max-width: 767px) {
+    font-size: 58px;
+  }
+}
+
+div {
+  font-size: 30px;
+  @media (max-width: 767px) {
+    font-size: 15px;
+  }
+}

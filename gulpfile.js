@@ -54,15 +54,15 @@ let {src, dest} = require('gulp'), // переменные которым при
 //------------------------------------------------
   browsersync = require("browser-sync").create(); // обновление страницы
 //------------------------------------------------
-  fileinclude = require("gulp-file-include");
-  del = require("del");
-  scss = require("gulp-sass");
-  autoprefixer = require("gulp-autoprefixer");
-  group_media = require("gulp-group-css-media-queries");
-  clean_css = require("gulp-clean-css");
-  rename = require("gulp-rename");
-  uglify = require("gulp-uglify-es").default;
-  imagemin = require("gulp-imagemin");
+  fileinclude = require("gulp-file-include"); // собирает конечный файл из нескольких подключенных
+  del = require("del"); // очистка и обновление файлов в конечной папке
+  scss = require("gulp-sass"); // конвертирует .scss файлы в .css
+  autoprefixer = require("gulp-autoprefixer"); // автопрефиксер
+  group_media = require("gulp-group-css-media-queries"); // группирует все медиа-запросы и ставит их в конец файла стилей
+  clean_css = require("gulp-clean-css"); // минимизирует и сжимает файл со стилями
+  rename = require("gulp-rename"); // переименовывает минимизированный файл стилей
+  uglify = require("gulp-uglify-es").default; // сжатие и оптимизация .js файлов
+  imagemin = require("gulp-imagemin"); // оптимизирует изображения
   webp = require("gulp-webp");
 //==============================================================================
 
@@ -85,8 +85,8 @@ function browserSync(params) {
 //==============================================================================
 // ФУНКЦИЯ ДЛЯ РАБОТЫ С HTML
 function html() {
-  return src(path.src.html) // путь к исходникам
-    .pipe(fileinclude()) // сборка HTML файлов в один
+  return src(path.src.html)      // путь к исходникам
+    .pipe(fileinclude())         // сборка подключаемых HTML файлов в один
     .pipe(dest(path.build.html)) // путь к конечной папке через переменную
                                  // через переменную -- dest--
 
@@ -98,49 +98,49 @@ function html() {
 //==============================================================================
 // ФУНКЦИЯ ОБРАБОТКИ ФАЙЛОВ СТИЛЕЙ
 function css() {
-  return src(path.src.css)
-    .pipe(
-      scss({
+  return src(path.src.css)                          // путь к исходникам
+    .pipe( 
+      scss({                                        // конвертируем .scss файлы в .css
         outputStyle: "expanded"
       })
     )
     .pipe(
-      group_media()
+      group_media()                                 // группируем все медиа-запросы и ставим их в конец файла стилей
     )
     .pipe(
-      autoprefixer({
+      autoprefixer({                                // обработка через автопрефиксер
         overrideBrowserslist: ["Last 4 versions"],
         cascade: true
       })
     )
-    .pipe(dest(path.build.css))
-    .pipe(clean_css())
+    .pipe(dest(path.build.css))                     // создаем файл стилей с расширением .css (он не будет подключаться к HTML файлам, он для заказчика)
+    .pipe(clean_css())                              // минимизируем и сжимаем файл со стилями *.css
     .pipe(
-      rename({
+      rename({                                      // переименовываем минимизированный файл стилей
         extname: ".min.css"
       })
     )
-    .pipe(dest(path.build.css))
-    .pipe(browsersync.stream())
+    .pipe(dest(path.build.css))                     // создаем минимизированный файл стилей (он будет подключаться к HTML файлам)
+    .pipe(browsersync.stream())                     // обновляем страницу
 }
 //==============================================================================
 
 //==============================================================================
 // ФУНКЦИЯ ДЛЯ ОБРАБОТКИ СКРИПТОВЫХ ФАЙЛОВ
 function js() {
-  return src(path.src.js)
-    .pipe(fileinclude())
-    .pipe(dest(path.build.js))
+  return src(path.src.js)         // путь к исходникам
+    .pipe(fileinclude())          // собираем подключаемые файлы скриптов в один файл
+    .pipe(dest(path.build.js))    // выгружаем в конечную папку
     .pipe(
-      uglify()
+      uglify()                    // минимизируем и оптимизируем файл скриптов
     )
     .pipe(
-      rename({
+      rename({                    // переименовываем минимизированный файл
         extname: ".min.js"
       })
     )
-    .pipe(dest(path.build.js))
-    .pipe(browsersync.stream())
+    .pipe(dest(path.build.js))    // выгружаем переименованный и минимизированный файл в конечную папку
+    .pipe(browsersync.stream())   // обновляем браузер
 }
 //==============================================================================
 
@@ -149,16 +149,18 @@ function js() {
 function images() {
   return src(path.src.img)
     .pipe(
-      webp({
-        quality: 70
-      })
+      webp({                                   // TODO: !!! ПРОВЕРИТЬ ПОЧЕМУ НЕ РАБОТАЕТ ДАННЫЙ ПЛАГИН !!!
+        quality: 70                            // Gulp запускается нормально, но конвертации файлов в webp
+      })                                       // не происходит
     )
     .pipe(dest(path.build.img))
     .pipe(src(path.src.img))
     .pipe(
       imagemin({
         progressive: true,
-        svgoPlugins: [{removeViewBox: false}],
+        svgoPlugins: [{removeViewBox: false}],  // TODO: !!! ПРОВЕРИТЬ ПОЧЕМУ НЕ РАБОТАЕТ ДАННЫЙ ПАРАМЕТР !!!
+                                                // при запуске Gulp в браузере выходит ошибка, а при отключении этого
+                                                // параметра все работает, т.е. плагин выдает ошибку при обработке .svg
         interlaced: true,
         optimizationLevel: 3 // 0 to 7
       })
@@ -193,7 +195,7 @@ let watch = gulp.parallel(build, watchFiles, browserSync);
 //==============================================================================
 
 //==============================================================================
-// переменные для подключения к Gulp
+// переменные и функции для подключения к Gulp
 // они берутся из переменных --build-- и --watch--
 // объявленные выше
 exports.images = images;

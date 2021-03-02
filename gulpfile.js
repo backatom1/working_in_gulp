@@ -8,7 +8,7 @@
 let project_folder = "dist"; //название папки с результатами работы Gulp (можно присвоть путь папки проекта чтобы 
                              //папка с конечными файлами называлась так же как и папка всего проекта: 
                              //<< let project_folder = require("path").basename(__dirname); >>)
-let source_folder = "#src"; //название папки в которой будем работать (исходники)
+let source_folder = "#src";  //название папки в которой будем работать (исходники)
 //--------------------------
 //==============================
 
@@ -16,21 +16,21 @@ let source_folder = "#src"; //название папки в которой бу
 // ПЕРЕМЕННАЯ ПУТЕЙ К ФАЙЛАМ И ПАПКАМ
 let path = { // переменная содержащая пути к исходникам, конечным файлам и др.
   build:{ // объект хранящий пути вывода конечных файлов и папок
-    html: project_folder + "/", // HTML файлы
-    css: project_folder + "/css/", // CSS файлы
-    js: project_folder + "/js/", // Javascript файлы
-    img: project_folder + "/img/", // изображения
-    fonts: project_folder + "/fonts/" // шрифты
+    html: project_folder + "/",        // HTML файлы
+    css: project_folder + "/css/",     // CSS файлы
+    js: project_folder + "/js/",       // Javascript файлы
+    img: project_folder + "/img/",     // изображения
+    fonts: project_folder + "/fonts/"  // шрифты
   },
   src:{ //объект хранящий пути к исходникам в которых ведется работа
     //----------------------------------------------------------
     // ** - слушаются все файлы во всех папках и подпапках пути
     //----------------------------------------------------------
     html: [source_folder + "/*.html", "!" + source_folder + "/_*.html"], // HTML файлы
-    css: source_folder + "/scss/style.scss", // CSS файлы
-    js: source_folder + "/js/script.js", // Javascript файлы
-    img: source_folder + "/img/**/*.{jpg, png, svg, gif, ico, webp}", // изображения
-    fonts: source_folder + "/fonts/*.ttf" // шрифты
+    css: source_folder + "/scss/style.scss",                             // CSS файлы
+    js: source_folder + "/js/script.js",                                 // Javascript файлы
+    img: source_folder + "/img/**/*.{jpg, png, svg, gif, ico, webp}",    // изображения
+    fonts: source_folder + "/fonts/*.ttf"                                // шрифты
   },
   watch:{ // обьект постоянно слушающий изменения в файлах и папках проекта
           // налету (в браузере измененеия появляются сразу после сохранения)

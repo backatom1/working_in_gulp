@@ -29,7 +29,7 @@ let path = { // переменная содержащая пути к исход
     html: [source_folder + "/*.html", "!" + source_folder + "/_*.html"], // HTML файлы
     css: source_folder + "/scss/style.scss",                             // CSS файлы
     js: source_folder + "/js/script.js",                                 // Javascript файлы
-    img: source_folder + "/img/**/*.{jpg, png, svg, gif, ico, webp}",    // изображения
+    img: source_folder + "/img/**/*.+(jpg|png|svg|gif|ico|webp)",        // изображения
     fonts: source_folder + "/fonts/*.ttf"                                // шрифты
   },
   watch:{ // обьект постоянно слушающий изменения в файлах и папках проекта
@@ -37,7 +37,7 @@ let path = { // переменная содержащая пути к исход
     html: source_folder + "/**/*.html",
     css: source_folder + "/scss/**/*.scss",
     js: source_folder + "/js/**/*.js",
-    img: source_folder + "/img/**/*.{jpg, png, svg, gif, ico, webp}"
+    img: source_folder + "/img/**/*.+(jpg|png|svg|gif|ico|webp)"
   },
   clean: "./" + project_folder + "/" // обьект автоматически чисящий
                                      // все файлы в конечной папке
